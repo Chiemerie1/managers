@@ -42,7 +42,7 @@ class CustomUser(AbstractBaseUser):
     last_name = models.CharField(max_length=50)
     enterprise_name = models.CharField(max_length=200, unique=True)
     email = models.EmailField(verbose_name="Email address", unique=False)
-    date = models.DateTimeField(default=timezone)
+    date = models.DateTimeField(default=timezone.now)
     
     is_active = models.BooleanField(default=True)
     is_admin = models.BooleanField(default=False)

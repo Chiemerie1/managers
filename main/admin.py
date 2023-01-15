@@ -4,7 +4,6 @@ from django.contrib.auth.models import Group
 from django.contrib.auth.admin import UserAdmin as BaseUserAdmin
 from django.contrib.auth.forms import ReadOnlyPasswordHashField
 from django.core.exceptions import ValidationError
-from django.utils import timezone
 
 from main.models import CustomUser
 
@@ -59,14 +58,14 @@ class UserAdmin(BaseUserAdmin):
     )
 
     add_fieldsets = (
-        (None, {
+        ("User Cceation", {
             "classes": ("wide", ),
             "fields": (
                 "enterprise_name",
                 "first_name",
                 "last_name",
                 "email",
-                "password",
+                "password1",
                 "password2"
             )
         }
