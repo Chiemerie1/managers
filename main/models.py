@@ -1,70 +1,73 @@
 from django.db import models
-from django.contrib.auth.models import AbstractBaseUser, PermissionsMixin, BaseUserManager
+from django.contrib.auth.models import AbstractBaseUser, BaseUserManager
 from django.utils import timezone
 
-# Create your models here.
 
 
-#### custom user manager
-class CustomUserManager(BaseUserManager):
+class CUserManager(BaseUserManager):
 
-    def create_user(self, first_name, last_name, email, company_name, password):
-
-        if not email:
-            raise ValueError("Please provide a correctly formatted email address")
+    def create_user(self, enterprise_name, first_name, last_name, email, password=None):
+        
+        if not enterprise_name:
+            raise ValueError("Users must specify enterprise name")
 
         user = self.model(
-            email = self.normalize_email(email),
+            email=self.normalize_email(email),
             first_name=first_name,
             last_name=last_name,
-            company_name=company_name,
+            enterprise_name=enterprise_name
+
         )
         user.set_password(password)
-        user.save()
+        user.save(using=self._db)
         return user
 
-    def create_superuser(self, first_name, last_name, username, email, password, **other_fields):
-
-        other_fields.get("is_active", True)
-        other_fields.get("is_staff", True)
-        other_fields.get("is_superuser", True)
-
-        user = self.model(
-            email = self.normalize_email(email),
+    
+    def create_superuser(self, enterprise_name, first_name, last_name, email, password=None):
+        
+        user = self.create_user(
+            enterprise_name,
             first_name=first_name,
             last_name=last_name,
-            username=username,
+            email=self.normalize_email(email),
+            password=password
         )
-        user.set_password(password)
-        user.save()
+        user.is_admin = True
+        user.save(using=self._db)
         return user
 
 
-#### Custom user
-class CustomUser(AbstractBaseUser, PermissionsMixin):
-    first_name = models.CharField(max_length=100)
-    last_name = models.CharField(max_length=100)
-    email = models.EmailField(unique=False)
-    company_name = models.CharField(
-        max_length=200,
-        help_text="Input the name of your office or business of enterprise",
-        unique=True
-    )
-    company_reg_no = models.CharField(max_length=100, verbose_name="company regostration number or number of incoporation")
-    branches = models.IntegerField(verbose_name="Number of enterprise branches")
-    start_date = models.DateTimeField(default=timezone.now)
-    is_staff = models.BooleanField(default=False)
-    is_active = models.BooleanField(default=False)
-    is_superuser = models.BooleanField(default=False)
+class CustomUser(AbstractBaseUser):
+    first_name = models.CharField(max_length=50)
+    last_name = models.CharField(max_length=50)
+    enterprise_name = models.CharField(max_length=200, unique=True)
+    email = models.EmailField(verbose_name="Email address", unique=False)
+    date = models.DateTimeField(default=timezone)
+    
+    is_active = models.BooleanField(default=True)
+    is_admin = models.BooleanField(default=False)
 
-    USERNAME_FIELD = "company_name"
-    REQUIRED_FEILDS = ["first_name", "last_name", "email", "company_name", "company_reg_no", "branches"]
+    objects = CUserManager()
 
-    object = CustomUserManager()
+
+    USERNAME_FIELD = "enterprise_name"
+    REQUIRED_FIELDS = ["first_name", "last_name", "email"]
 
     def __str__(self):
-        return self.company_name
+        return self.enterprise_name
 
 
+    def has_perm(self, perm, obj=None):
+        return True
+
+    def has_module_perms(self, app_label):
+        return True
+
+    @property
+    def is_staff(self):
+        return self.is_admin
+
+
+    
 
 

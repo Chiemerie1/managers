@@ -76,17 +76,17 @@ WSGI_APPLICATION = 'managers.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        'ENGINE': 'django.db.backends.mysql',
 
         'NAME': 'managers',
 
-        'USER': 'postgres',
+        'USER': 'root',
 
-        'PASSWORD': 'nansernanser',
+        'PASSWORD': 'nanser',
 
         'HOST': 'localhost',
 
-        'PORT': '',
+        'PORT': '3306',
     }
 }
 
