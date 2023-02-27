@@ -54,11 +54,11 @@ class UserAdmin(BaseUserAdmin):
     fieldsets = (
         ("Login", {"fields": ("enterprise_name", "password", "date")}),
         ("Personal Info", {"fields": ("first_name", "last_name", "email")}),
-        ("Permissions", {"fields": ("is_admin",)}),
+        ("Permissions", {"fields": ("is_admin", "is_active")}),
     )
 
     add_fieldsets = (
-        ("User Cceation", {
+        ("User Creation", {
             "classes": ("wide", ),
             "fields": (
                 "enterprise_name",
