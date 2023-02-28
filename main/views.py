@@ -1,6 +1,7 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate, login, logout
 from main.forms import RegistrationForm
+from django.contrib.auth.forms import AuthenticationForm
 
 # Create your views here.
 
@@ -27,4 +28,11 @@ def registration(request):
 def console(request):
     context = {}
     return render(request, template_name="main/console.html")
+
+def log_in(request):
+    context ={}
+    if request.method == "POST":
+        form = AuthenticationForm(request.POST)
+        if form.is_valid():
+            pass
 
