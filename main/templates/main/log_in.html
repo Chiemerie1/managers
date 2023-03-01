@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html>
+
+<h2>Sign in</h2>
+
+<form method="POST">
+    {% csrf_token %}
+    {% for fields in login_form %}
+    <p>
+        {{ fields.label_tag }}
+        {{ fields }}
+        {{ fields.help_text }}
+    {% endfor %}
+    </p>
+
+    <button type="submit">Register</button>
+</form>

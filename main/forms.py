@@ -13,4 +13,6 @@ class RegistrationForm(UserCreationForm):
 
 
 class LoginForm(forms.Form):
-    pass
+    enterprise_name = forms.CharField(max_length=200)
+    password = forms.CharField(max_length=200)
+    
