@@ -27,7 +27,7 @@ def registration(request):
 
 
 # console
-@login_required
+@login_required #take the following arguments (redirect_field_name, login_url)
 def console(request):
     return render(request, template_name="main/console.html")
 

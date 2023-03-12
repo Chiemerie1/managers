@@ -1,10 +1,10 @@
 from django.db import models
-from django.contrib.auth.models import AbstractBaseUser, BaseUserManager
+from django.contrib.auth.models import AbstractBaseUser, BaseUserManager, User
 from django.utils import timezone
 
 
 
-class CUserManager(BaseUserManager):
+class CustomUserManager(BaseUserManager):
 
     def create_user(self, enterprise_name, first_name, last_name, email, password=None):
         
@@ -37,7 +37,7 @@ class CUserManager(BaseUserManager):
         return user
 
 
-class CustomUser(AbstractBaseUser):
+class MainManager(AbstractBaseUser):
     first_name = models.CharField(max_length=50)
     last_name = models.CharField(max_length=50)
     enterprise_name = models.CharField(max_length=200, unique=True)
@@ -45,9 +45,9 @@ class CustomUser(AbstractBaseUser):
     date = models.DateTimeField(default=timezone.now)
     
     is_active = models.BooleanField(default=True)
-    is_admin = models.BooleanField(default=False)
+    is_admin = models.BooleanField(default=True)
 
-    objects = CUserManager()
+    objects = CustomUserManager()
 
 
     USERNAME_FIELD = "enterprise_name"
@@ -66,8 +66,31 @@ class CustomUser(AbstractBaseUser):
     @property
     def is_staff(self):
         return self.is_admin
+    
 
 
+class FranchiseManager(AbstractBaseUser):
+
+    BRANCH_MANAGER = "BR"
+    EMPLOYEE = "EMP"
+
+    DESIGNATION = [
+        (BRANCH_MANAGER, "Branch manager"),
+        (EMPLOYEE, "Employee")
+    ]
+
+    first_name = models.CharField(max_length=128, blank=True)
+    last_name = models.CharField(max_length=128, blank=True)
+    designation = models.CharField(max_length=20, choices=DESIGNATION)
+    # company = models.ForeignKey(MainManager, on_delete=models.CASCADE)
+    branch = models.CharField(max_length=200, blank=True)
+    date = models.DateTimeField(default=timezone.now)
+    is_admin = models.BooleanField(default=False)
+
+    USERNAME_FIELD = "first_name"
+
+    def __str__(self):
+        return self.first_name
     
 
 

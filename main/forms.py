@@ -1,13 +1,13 @@
 from django import forms
 from django.contrib.auth.forms import UserCreationForm
 
-from main.models import CustomUser
+from main.models import MainManager
 
 
 
 class RegistrationForm(UserCreationForm):
     class Meta:
-        model = CustomUser
+        model = MainManager
         fields = ["enterprise_name", "first_name", "last_name", "email", "password1", "password2"]
 
 

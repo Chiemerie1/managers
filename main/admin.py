@@ -5,7 +5,7 @@ from django.contrib.auth.admin import UserAdmin as BaseUserAdmin
 from django.contrib.auth.forms import ReadOnlyPasswordHashField
 from django.core.exceptions import ValidationError
 
-from main.models import CustomUser
+from main.models import MainManager, FranchiseManager
 
 # Register your models here.
 
@@ -16,7 +16,7 @@ class UserCreationForm(forms.ModelForm):
     password2 = forms.CharField(label="password confirmation", widget=forms.PasswordInput)
 
     class Meta:
-        model = CustomUser
+        model = MainManager
         fields = ("enterprise_name","first_name", "last_name", "email")
 
     def clean_password2(self):
@@ -40,8 +40,10 @@ class UserChangeForm(forms.ModelForm):
     password = ReadOnlyPasswordHashField()
 
     class Meta:
-        model = CustomUser
+        model = MainManager
         fields = ("first_name", "last_name", "email", "is_active", "date", "is_admin")
+
+
 
 
 class UserAdmin(BaseUserAdmin):
@@ -77,5 +79,14 @@ class UserAdmin(BaseUserAdmin):
     filter_horizontal = ()
 
 
-admin.site.register(CustomUser, UserAdmin)
+class ManagerAdmin(admin.ModelAdmin):
+
+    list_display = ("first_name", "designation", "company")
+
+
+admin.site.register(MainManager, UserAdmin)
+
+admin.site.register(FranchiseManager, ManagerAdmin)
+
 admin.site.unregister(Group)
+

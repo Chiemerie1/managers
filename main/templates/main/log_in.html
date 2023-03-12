@@ -1,17 +1,54 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
+    {% load static %}
 
-<h2>Sign in</h2>
+    <head>
+        <link rel="stylesheet" href="{% static '/css/style.css' %}"/>
+        <title>Login</title>
 
-<form method="POST">
-    {% csrf_token %}
-    {% for fields in login_form %}
+        <script type="module" src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.esm.js"></script>
+        <script nomodule src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.js"></script>
+    </head>
+
+    <body>
+        <section>
+            <div class="form-box">
+                <div class="form-value">
+                    <form method="POST">
+                        {% csrf_token %}
+                        <h2>Sign in</h2>
+                        <div class="inputbox">
+                            <ion-icon name="briefcase-outline"></ion-icon>
+                            <input type="text" name="username" autofocus autocapitalize="none" autocomplete="username" placeholder="Enterprice name">
+                            
+                        </div>
+                        <div class="inputbox">
+                            <ion-icon name="bag-outline"></ion-icon>
+                            <input type="password" name="password" autofocus autocapitalize="none" autocomplete="current-password" placeholder="Password">
+                            
+                        </div>
+                        <div class="forget">
+                            <input type="checkbox">Remember me
+                            <a href="#">Forget password</a>
+                        </div>
+
+                        <button type="submit">Login</button>
+                        <div class="register">
+                            <p>
+                                Don't have an account?
+                                <a href="/">Register</a>
+                            </p>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </section>
+    </body>
+
+    {% comment %} {% for fields in login_form %}
     <p>
         {{ fields.label_tag }}
         {{ fields }}
         {{ fields.help_text }}
-    {% endfor %}
     </p>
-
-    <button type="submit">Register</button>
-</form>
+    {% endfor %} {% endcomment %}
