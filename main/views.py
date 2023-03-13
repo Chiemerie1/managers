@@ -17,7 +17,7 @@ def registration(request):
             password = form.cleaned_data.get("password1")
             user_account = authenticate(username=enterprise_name, password=password)
             login(request, user_account)
-            return redirect("console")
+            return redirect("main:console")
         else:
             context["reg_form"] = form
     else:
@@ -27,7 +27,7 @@ def registration(request):
 
 
 # console
-@login_required #take the following arguments (redirect_field_name, login_url)
+@login_required #takes the following arguments (redirect_field_name, login_url)
 def console(request):
     return render(request, template_name="main/console.html")
 
@@ -43,7 +43,7 @@ def log_in(request):
             user = authenticate(username=enterprise_name, password=password)
             if user.is_authenticated:
                 login(request, user)
-                return redirect("console")
+                return redirect("main:console")
         else:
             context["login_form"] = form
     else:

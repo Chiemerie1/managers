@@ -79,10 +79,10 @@ class FranchiseManager(AbstractBaseUser):
         (EMPLOYEE, "Employee")
     ]
 
+    company = models.ForeignKey(MainManager, on_delete=models.CASCADE, primary_key=True)
     first_name = models.CharField(max_length=128, blank=True)
     last_name = models.CharField(max_length=128, blank=True)
     designation = models.CharField(max_length=20, choices=DESIGNATION)
-    # company = models.ForeignKey(MainManager, on_delete=models.CASCADE)
     branch = models.CharField(max_length=200, blank=True)
     date = models.DateTimeField(default=timezone.now)
     is_admin = models.BooleanField(default=False)
@@ -93,4 +93,27 @@ class FranchiseManager(AbstractBaseUser):
         return self.first_name
     
 
+class ProductCategories(models.Model):
+    manager = models.ForeignKey(FranchiseManager, on_delete=models.CASCADE)
+    name = models.CharField(max_length=200)
+
+    def __str__(self):
+        return f" {self.name} :-: {self.manager}"
+    
+
+class Products(models.Model):
+    category = models.ForeignKey(ProductCategories, on_delete=models.CASCADE)
+    item = models.CharField(max_length=50)
+    unit_price = models.IntegerField(default=0)
+    product_code = models.IntegerField(default=0, primary_key=True)
+    stock = models.IntegerField(default=0) 
+    sold = models.IntegerField(default=0)
+
+    def total_price(self, *args, **kwargs):
+        self.total = self.unit_price * self.stock
+        super(Products, self).save(*args, **kwargs)
+        return self.total
+        
+    def __str__(self):
+        return self.item
 

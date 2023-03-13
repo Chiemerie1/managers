@@ -5,7 +5,7 @@ from django.contrib.auth.admin import UserAdmin as BaseUserAdmin
 from django.contrib.auth.forms import ReadOnlyPasswordHashField
 from django.core.exceptions import ValidationError
 
-from main.models import MainManager, FranchiseManager
+from main.models import MainManager, FranchiseManager, ProductCategories, Products
 
 # Register your models here.
 
@@ -79,14 +79,34 @@ class UserAdmin(BaseUserAdmin):
     filter_horizontal = ()
 
 
+# Model Admin fields
+
 class ManagerAdmin(admin.ModelAdmin):
 
     list_display = ("first_name", "designation", "company")
 
 
-admin.site.register(MainManager, UserAdmin)
 
+class CategoryAdmin(admin.ModelAdmin):
+
+    list_display = ["manager", "name"]
+    search_fields = ["name"]
+
+
+
+class productAdmin(admin.ModelAdmin):
+
+    list_display = ["item", "category", "unit_price", "stock", "total_price"]
+
+
+
+
+
+admin.site.register(ProductCategories, CategoryAdmin)
+
+admin.site.register(MainManager, UserAdmin)
 admin.site.register(FranchiseManager, ManagerAdmin)
+admin.site.register(Products, productAdmin)
 
 admin.site.unregister(Group)
 
