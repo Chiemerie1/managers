@@ -90,7 +90,7 @@ class ManagerAdmin(admin.ModelAdmin):
 class CategoryAdmin(admin.ModelAdmin):
 
     list_display = ["manager", "name"]
-    search_fields = ["name"]
+    search_fields = ["manager__first_name"]
 
 
 
